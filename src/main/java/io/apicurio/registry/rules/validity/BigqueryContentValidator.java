@@ -24,9 +24,9 @@ public class BigqueryContentValidator extends BigqueryGsonBuilder implements Con
     }
 
     // @Override
-    // public void validateReferences(ContentHandle artifactContent, List<ArtifactReference> references)
-    //         throws RuleViolationException {
-    //     validate(null, artifactContent, Collections.emptyMap());
-    // }
+    public void validateReferences(ContentHandle artifactContent, List<ArtifactReference> references)
+            throws RuleViolationException {
+        validate(null, artifactContent, Collections.emptyMap());
+    }
 
 }
