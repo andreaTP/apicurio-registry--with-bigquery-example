@@ -18,11 +18,11 @@
         <maven.compiler.release>17</maven.compiler.release>
         
         <!-- Apicurio Version -->
-        <apicurio.version>2.4.2.Final</apicurio.version>
-        <apicurio-common-app-components.version>0.2.1.Final</apicurio-common-app-components.version>
+        <apicurio.version>2.4.5.Final</apicurio.version>
+        <apicurio-common-app-components.version>0.1.21.Final</apicurio-common-app-components.version>
 
         <!-- Quarkus Version -->
-        <quarkus.version>2.16.10.Final</quarkus.version>
+        <quarkus.version>2.16.9.Final</quarkus.version>
 
         <version.dependency.plugin>3.3.0</version.dependency.plugin>
         <version.compiler.plugin>3.11.0</version.compiler.plugin>
@@ -69,13 +69,13 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <excludeArtifactIds>apicurio-common-app-components-config-index,apicurio-common-app-components-logging,apicurio-common-app-components-config-definitions,apicurio-common-app-components-config-impl,apicurio-common-app-components-core</excludeArtifactIds>
+                            <excludeArtifactIds>apicurio-tenant-manager-datamodel,apicurio-tenant-manager-client,apicurio-common-rest-client-common,apicurio-common-app-components-config-index,apicurio-common-app-components-logging,apicurio-common-app-components-config-definitions,apicurio-common-app-components-config-impl,apicurio-common-app-components-core,apicurio-common-app-components-multitenancy,apicurio-common-app-components-multitenancy-spi</excludeArtifactIds>
                             <includeGroupIds>io.apicurio</includeGroupIds>
                             <includeTypes>jar,maven-plugin</includeTypes>
                             <outputDirectory>
                                 ${project.build.directory}/classes
                             </outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
@@ -165,30 +165,19 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-            <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+            <plugin>
+                <groupId>io.smallrye</groupId>
+                <artifactId>jandex-maven-plugin</artifactId>
+                <version>3.1.2</version>
                 <executions>
-                    <execution>
-                        <id>assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>${project.artifactId}-${project.version}</finalName>
-                            <attach>true</attach>
-                            <descriptors>
-                                <descriptor>src/main/assembly/assembly.xml</descriptor>
-                            </descriptors>
-                            <archiverConfig>
-                                <defaultDirectoryMode>0755</defaultDirectoryMode>
-                            </archiverConfig>
-                            <tarLongFileMode>${tar.long.file.mode}</tarLongFileMode>
-                        </configuration>
-                    </execution>
+                  <execution>
+                    <id>make-index</id>
+                    <goals>
+                      <goal>jandex</goal>
+                    </goals>
+                  </execution>
                 </executions>
-            </plugin> -->
+              </plugin>
         </plugins>
     </build>
 </project>
