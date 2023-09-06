@@ -24,8 +24,11 @@
         <!-- Quarkus Version -->
         <quarkus.version>2.16.9.Final</quarkus.version>
 
+        <assertj.version>3.24.2</assertj.version>
+
         <version.dependency.plugin>3.3.0</version.dependency.plugin>
         <version.compiler.plugin>3.11.0</version.compiler.plugin>
+        <version.surefire.plugin>3.1.2</version.surefire.plugin>
     </properties>
 
     <dependencyManagement>
@@ -52,6 +55,35 @@
           <groupId>com.google.cloud</groupId>
           <artifactId>google-cloud-bigquery</artifactId>
           <version>2.17.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-registry-client</artifactId>
+            <version>${apicurio.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-rest-client-common</artifactId>
+            <version>0.1.18.Final</version> <!-- need to align test scope version to the one coming from -client explicitly -->
+            <scope>test</scope>
         </dependency>
     </dependencies>
     
@@ -158,12 +190,32 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.surefire.plugin}</version>
                 <configuration>
                     <groups>${groups}</groups>
                     <systemProperties>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                     </systemProperties>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${version.surefire.plugin}</version>
+                <executions>
+                <execution>
+                    <goals>
+                    <goal>integration-test</goal>
+                    <goal>verify</goal>
+                    </goals>
+                    <configuration>
+                    <systemPropertyVariables>
+                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                    </configuration>
+                </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>io.smallrye</groupId>
